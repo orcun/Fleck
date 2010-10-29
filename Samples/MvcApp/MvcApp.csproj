@@ -76,16 +76,18 @@
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Framework\Bootstrapper.cs" />
+    <Compile Include="Framework\BootstrapperTasks\StartEventAggregatorTask.cs" />
     <Compile Include="Framework\BootstrapperTasks\WebsocketServerStartupTask.cs" />
     <Compile Include="Framework\EventAggregator.cs" />
     <Compile Include="Framework\Extensions.cs" />
     <Compile Include="Framework\IEventAggregator.cs" />
     <Compile Include="Framework\Interfaces\IBootstrapperTask.cs" />
-    <Compile Include="Framework\Interfaces\IWebSocketServer.cs" />
     <Compile Include="Framework\Interfaces\ISocketMessage.cs" />
     <Compile Include="Framework\Interfaces\SubscriptionService.cs" />
+    <Compile Include="Framework\ISocketManager.cs" />
     <Compile Include="Framework\ISubscriptionService.cs" />
     <Compile Include="Framework\Server.cs" />
+    <Compile Include="Framework\SocketManager.cs" />
     <Compile Include="Framework\SocketSendAdapter.cs" />
     <Compile Include="Framework\SubscribeAttribute.cs" />
     <Compile Include="Framework\WindsorServiceLocator.cs" />

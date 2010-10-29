@@ -9,13 +9,11 @@ using Microsoft.Practices.ServiceLocation;
 namespace MvcApp.Framework
 {
     [Singleton]
-    public class Server : IWebSocketServer
+    public class Server
     {
-        readonly List<WebSocketConnection> _allSockets;
-        public Server()
+        public Server(ISocketManager socketManager)
         {
             var serializer = new JavaScriptSerializer();
-            _allSockets = new List<WebSocketConnection>();
             //Whats with origin?
             var server = new WebSocketServer(8181, "http://localhost:54426", "ws://localhost:8181");
             var socketMessages = new Dictionary<string, Type>();
@@ -34,11 +32,11 @@ namespace MvcApp.Framework
             {
                 socket.OnOpen = () =>
                 {
-                    _allSockets.Add(socket);
+                    socketManager.Add(socket);
                 };
                 socket.OnClose = () =>
                 {
-                    _allSockets.Remove(socket);
+                    socketManager.Remove(socket);
                 };
                 //wire format
                 //string Type
@@ -56,15 +54,7 @@ namespace MvcApp.Framework
             });
         }
 
-        public void Publish(object obj)
-        {
-            var serializer = new JavaScriptSerializer();
-            string sJson = serializer.Serialize(obj);
-            foreach (var socket in _allSockets.ToList())
-            {
-                socket.Send(sJson);
-            }
-        }
+        
     }
 
     public class WireMessage
