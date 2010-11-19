@@ -19,6 +19,7 @@ namespace MvcApp.Framework.BootstrapperTasks
 
         public void Execute()
         {
+			_container.Register(Component.For<ISubscriptionService>().ImplementedBy<SubscriptionService>().LifeStyle.Singleton);
 			_container.Register(Component.For<IEventAggregator>().ImplementedBy<EventAggregator>().LifeStyle.Singleton);
         }
     }

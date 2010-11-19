@@ -7,12 +7,12 @@ namespace MvcApp.Framework
     public class EventAggregator : IEventAggregator
     {
         private readonly ISubscriptionService _subscriptionService;
-        //private readonly MethodInfo _publish;
+        private readonly MethodInfo _publish;
 
         public EventAggregator(ISubscriptionService subscriptionService)
         {
             _subscriptionService = subscriptionService;
-            //_publish = typeof(EventAggregator).GetMethod("Publish");
+            _publish = typeof(EventAggregator).GetMethod("Publish");
         }
 
         public void Publish<T>(T eventMessage)
@@ -39,9 +39,7 @@ namespace MvcApp.Framework
 
         public void PublishMessage(object obj)
         {
-            dynamic eventAggregator = this;
-            eventAggregator.Publish(obj);
-            //_publish.MakeGenericMethod(obj.GetType()).Invoke(this, new[] {obj});
+            _publish.MakeGenericMethod(obj.GetType()).Invoke(this, new[] { obj });
         }
     }
 }

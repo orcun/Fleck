@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Framework\Bootstrapper.cs" />
+    <Compile Include="Framework\BootstrapperTasks\RegisterNamespacesTask.cs" />
     <Compile Include="Framework\BootstrapperTasks\StartEventAggregatorTask.cs" />
     <Compile Include="Framework\BootstrapperTasks\WebsocketServerStartupTask.cs" />
     <Compile Include="Framework\EventAggregator.cs" />
@@ -91,6 +92,8 @@
     <Compile Include="Framework\SocketSendAdapter.cs" />
     <Compile Include="Framework\SubscribeAttribute.cs" />
     <Compile Include="Framework\WindsorServiceLocator.cs" />
+    <Compile Include="Framework\WireMessage.cs" />
+    <Compile Include="Framework\WireResponseMessage.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -103,6 +106,7 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\json2.js" />
     <Content Include="Views\Home\Index.aspx" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

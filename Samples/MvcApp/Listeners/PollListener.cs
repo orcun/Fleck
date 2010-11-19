@@ -7,13 +7,20 @@ namespace MvcApp.Listeners
 {
     public class PollListener : IListener<SelectOptionMessage>
     {
+        private readonly ISocketManager _manager;
+
+        public PollListener(ISocketManager manager)
+        {
+            _manager = manager;
+        }
+
         public void Handle(SelectOptionMessage message)
         {
-            if (HttpContext.Current.Session["Poll"] == null)
+            if (HttpRuntime.Cache["Poll"] == null)
             {
-                HttpContext.Current.Session.Add("Poll", new Poll());
+                HttpRuntime.Cache["Poll"] = new Poll();
             }
-            var poll = (Poll)HttpContext.Current.Session["Poll"];
+            var poll = (Poll)HttpRuntime.Cache["Poll"];
 
             if (message.Yes)
             {
@@ -23,6 +30,7 @@ namespace MvcApp.Listeners
             {
                 poll.No += 1;
             }
+            _manager.Publish(poll);
         }
     }
 }

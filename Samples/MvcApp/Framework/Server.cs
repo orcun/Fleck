@@ -45,21 +45,15 @@ namespace MvcApp.Framework
                 //socket.OnMessage = message => Console.WriteLine(message);
                 socket.OnMessage = message =>
                 {
+                    socketManager.MessageBegin(socket);
                     var deserialized = serializer.Deserialize<WireMessage>(message);
                     var socketAdapter = new SocketSendAdapter(socket);
-                    var socketMessage = (ISocketMessage)serializer.Deserialize(deserialized.Data, socketMessages[deserialized.Uri]);
+                    var socketMessage = (ISocketMessage)serializer.Deserialize(serializer.Serialize(deserialized.Data), socketMessages[deserialized.Uri]);
                     socketMessage.Socket = socketAdapter;
                     eventAggregator.PublishMessage(socketMessage);
+                    socketManager.MessageEnd();
                 };
             });
         }
-
-        
-    }
-
-    public class WireMessage
-    {
-        public string Uri { get; set; }
-        public string Data { get; set; }
     }
 }

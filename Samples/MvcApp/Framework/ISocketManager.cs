@@ -6,6 +6,9 @@ namespace MvcApp.Framework
     {
         void Add(WebSocketConnection socket);
         void Remove(WebSocketConnection socket);
-        void Publish(object obj);
+        void Reply(object message);
+        void Publish(object message);
+        void MessageBegin(WebSocketConnection socket);
+        void MessageEnd();
     }
 }

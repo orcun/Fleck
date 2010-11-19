@@ -10,5 +10,10 @@ namespace MvcApp.Framework
         {
             _socket = socket;
         }
+
+        public void Send(string message)
+        {
+            _socket.Send(message);
+        }
     }
 }
