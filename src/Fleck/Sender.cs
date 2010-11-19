@@ -15,15 +15,13 @@ namespace Fleck
 
 		public void Send(string data)
 		{
-			if (Socket.Connected)
-			{
-				Socket.AsyncSend(DataFrame.Wrap(data),x => { });
-			}
-			else
-			{
-				_connection.OnClose();
-				Socket.Close();
-			}
+			if (!Socket.Connected) return;
+			var wrapped = DataFrame.Wrap(data);
+			Socket.BeginSend(wrapped, 0, wrapped.Length, SocketFlags.None, r =>
+				{
+					if (Socket.Connected)
+						Socket.EndSend(r);
+				}, null);
 		}
 	}
 }

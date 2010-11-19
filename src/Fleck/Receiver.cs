@@ -4,7 +4,7 @@ namespace Fleck
 {
 	internal class Receiver
 	{
-		public const int BufferSize = 256;
+		public const int BufferSize = 2;
 		private readonly WebSocketConnection _connection;
 
 		public Receiver(WebSocketConnection connection)
@@ -25,11 +25,16 @@ namespace Fleck
 			var buffer = new byte[BufferSize];
 
 			if (Socket == null || !Socket.Connected)
-				_connection.OnClose();
+			{
+				_connection.Close();
+				return;
+			}
 
-			Socket.AsyncReceive(buffer, frame, (sizeOfReceivedData, df) =>
+			Socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None,
+				r =>
 				{
-					var dataframe = (DataFrame) df;
+					int sizeOfReceivedData = Socket.EndReceive(r);
+					var dataframe = frame;
 
 					if (sizeOfReceivedData > 0)
 					{
@@ -39,7 +44,7 @@ namespace Fleck
 						{
 							string data = dataframe.ToString();
 
-								_connection.OnMessage(data);
+							_connection.OnMessage(data);
 
 
 							Receive();
@@ -51,10 +56,9 @@ namespace Fleck
 					}
 					else
 					{
-						_connection.OnClose();
-						Socket.Close();
+						_connection.Close();
 					}
-				});
+				}, null);
 		}
 	}
 }
