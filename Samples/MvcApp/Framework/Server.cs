@@ -15,7 +15,7 @@ namespace MvcApp.Framework
         {
             var serializer = new JavaScriptSerializer();
             //Whats with origin?
-            var server = new WebSocketServer(8181, "http://localhost:54426", "ws://localhost:8181");
+            var server = new WebSocketServer("ws://localhost:8181");
             var socketMessages = new Dictionary<string, Type>();
             foreach (var type in typeof (Server).Assembly.GetTypes().Where(t => typeof (ISocketMessage).IsAssignableFrom(t)))
             {
@@ -38,11 +38,6 @@ namespace MvcApp.Framework
                 {
                     socketManager.Remove(socket);
                 };
-                //wire format
-                //string Type
-                //object Message
-                //socket.Send
-                //socket.OnMessage = message => Console.WriteLine(message);
                 socket.OnMessage = message =>
                 {
                     socketManager.MessageBegin(socket);

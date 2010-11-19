@@ -41,7 +41,7 @@ namespace Fleck
 			ListenerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
 			var ipLocal = new IPEndPoint(IPAddress.Any, Port);
 			ListenerSocket.Bind(ipLocal);
-			ListenerSocket.Listen(100);
+			ListenerSocket.Listen(10);
 			Log.Info("Server stated on " + ListenerSocket.LocalEndPoint);
 			ListenForClients();
 			_config = config;

@@ -45,8 +45,8 @@
             return false;
         });
         $("#novote").click(function () {
-            var vote = '{ "uri": "/select", "data" : \'{ "yes": "false" }\' }';
-            ws.send(vote);
+            var vote = { uri: "/select", data: { yes: false} };
+            ws.send(JSON.stringify(vote));
             $("#poll").hide();
             $("#voting").show();
             return false;
