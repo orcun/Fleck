@@ -13,10 +13,11 @@
                 $("#yes").text(poll.Yes);
                 $("#no").text(poll.No);
                 $("#poll-result").show();
+            },
+            MvcApp_Models_Chat: function (chat) {
+                $("#chat").append(chat.Text + "<br />");
             }
         };
-        //        var inc = document.getElementById('incomming');
-        //        inc.innerHTML += "connecting to server ..<br/>"; 
         // create a new websocket and connect
         ws = new WebSocket('ws://localhost:8181/');
 
@@ -51,11 +52,19 @@
             $("#voting").show();
             return false;
         });
+        function chat() {
+            var text = $("#chatinput");
+            var chat = { uri: "/chat", data: { text: text.val()} };
+            ws.send(JSON.stringify(chat));
+            text.val('');
+        }
         $("#chatbutton").click(function () {
-            var vote = '{ "uri": "/select", "data" : \'{ "yes": "false" }\' }';
-            ws.send(vote);
-            $("#poll").hide();
-            $("#voting").show();
+            chat();
+        });
+        $("#chatinput").keyup(function (event) {
+            if (event.keyCode == '13') {
+                chat();
+            }
         });
     });
 </script>
