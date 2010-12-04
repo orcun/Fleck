@@ -74,6 +74,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\CanvasController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Framework\Bootstrapper.cs" />
     <Compile Include="Framework\BootstrapperTasks\RegisterNamespacesTask.cs" />
@@ -98,11 +99,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Framework\Interfaces\IListener.cs" />
+    <Compile Include="Listeners\CanvasListener.cs" />
     <Compile Include="Listeners\ChatListener.cs" />
     <Compile Include="Listeners\PollListener.cs" />
+    <Compile Include="Messages\CanvasMessage.cs" />
     <Compile Include="Messages\ChatMessage.cs" />
     <Compile Include="Messages\CurrentMessageInfo.cs" />
     <Compile Include="Messages\SelectOptionMessage.cs" />
+    <Compile Include="Models\Canvas.cs" />
     <Compile Include="Models\Chat.cs" />
     <Compile Include="Models\Poll.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -111,6 +115,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\json2.js" />
+    <Content Include="Views\Canvas\Index.aspx" />
     <Content Include="Views\Home\Index.aspx" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

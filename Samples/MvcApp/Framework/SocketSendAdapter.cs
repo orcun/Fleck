@@ -15,5 +15,27 @@ namespace MvcApp.Framework
         {
             _socket.Send(message);
         }
+
+        public override bool Equals(object obj)
+        {
+            var websocket = obj as WebSocketConnection;
+            if(websocket != null)
+            {
+                return websocket == _socket;
+            }
+            return base.Equals(obj);
+        }
+
+        public bool Equals(SocketSendAdapter other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Equals(other._socket, _socket);
+        }
+
+        public override int GetHashCode()
+        {
+            return (_socket != null ? _socket.GetHashCode() : 0);
+        }
     }
 }

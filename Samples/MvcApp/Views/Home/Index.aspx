@@ -90,6 +90,8 @@
             <br />
             No <span id="no">0</span>
         </div>
+        <a href="/canvas">Check out the canvas</a>
+        <br />
         <label for="chatinput">Chat</label>
         <input type="text" id="chatinput" />
         <input type="button" value="Submit" id="chatbutton" />

@@ -1,4 +1,5 @@
-﻿using MvcApp.Framework;
+﻿using System.Web;
+using MvcApp.Framework;
 using MvcApp.Messages;
 using MvcApp.Models;
 
@@ -15,7 +16,7 @@ namespace MvcApp.Listeners
 
         public void Handle(ChatMessage message)
         {
-            _manager.Publish(new Chat { Text = message.Text });
+            _manager.Publish(new Chat { Text = HttpUtility.HtmlEncode(message.Text) });
         }
     }
 }

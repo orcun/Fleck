@@ -8,6 +8,7 @@ namespace MvcApp.Framework
         void Remove(WebSocketConnection socket);
         void Reply(object message);
         void Publish(object message);
+        void PublishExcept(object message, SocketSendAdapter socket);
         void MessageBegin(WebSocketConnection socket);
         void MessageEnd();
     }
