@@ -7,15 +7,49 @@
 <script type="text/javascript" language="javascript">
     $(function () {
         var drawing = {
+            Name: "Anonymous",
             IsDrawing: false,
             MvcApp_Models_Canvas: function (canvas) {
-                $("#drawing").each(function () {
-                    if (this.getContext) {
-                        var ctx = this.getContext('2d');
-                        ctx.fillStyle = "rgb(0,0,0)";
-                        ctx.fillRect(canvas.X, canvas.Y, 1, 1);
+                var drawingCanvas = document.getElementById("drawing");
+                if (drawingCanvas.getContext) {
+                    var ctx = drawingCanvas.getContext('2d');
+                    ctx.fillStyle = "rgb(" + canvas.R + "," + canvas.G + "," + canvas.B + ")";
+                    ctx.fillRect(canvas.X, canvas.Y, 1, 1);
+                    var who = $("#" + canvas.Id);
+                    if (who.length == 0) {
+                        $("#who").append('<span id="' + canvas.Id + '">' + canvas.Name + '</span>');
+                        who = $("#" + canvas.Id);
                     }
-                });
+                    else {
+                        who.stop();
+                    }
+                    who.css('color', 'rgb(' + canvas.R + ',' + canvas.G + ',' + canvas.B + ')');
+                    who.animate({ opacity: 1.0 }, 1000, function () {
+                        $(this).fadeOut(1000, function () { $(this).remove(); })
+                    });
+                }
+            },
+            Clear: function () {
+                var drawingCanvas = document.getElementById("drawing");
+                drawingCanvas.width = drawingCanvas.width;
+            },
+            Draw: function (x, y) {
+                if (drawing.IsDrawing) {
+                    var canvas = { uri: "/canvas",
+                        data: { x: x, y: y,
+                            name: this.Name,
+                            r: this.Color.Red(),
+                            g: this.Color.Green(),
+                            b: this.Color.Blue()
+                        }
+                    };
+                    ws.send(JSON.stringify(canvas));
+                }
+            },
+            Color: {
+                Red: function () { return $("#color").val() == "red" ? 255 : 0; },
+                Green: function () { return $("#color").val() == "green" ? 255 : 0; },
+                Blue: function () { return $("#color").val() == "blue" ? 255 : 0; }
             }
         };
         var ws;
@@ -32,6 +66,7 @@
 
         $("#drawing").mousedown(function (event) {
             drawing.IsDrawing = true;
+            drawing.Draw(event.clientX - event.currentTarget.offsetLeft, event.clientY - event.currentTarget.offsetTop);
         });
 
         $("#drawing").mouseup(function (event) {
@@ -39,9 +74,23 @@
         });
 
         $("#drawing").mousemove(function (event) {
-            if (drawing.IsDrawing && this.getContext) {
-                var canvas = { uri: "/canvas", data: { x: event.clientX - event.currentTarget.offsetLeft, y: event.clientY - event.currentTarget.offsetTop} };
-                ws.send(JSON.stringify(canvas));
+            drawing.Draw(event.clientX - event.currentTarget.offsetLeft, event.clientY - event.currentTarget.offsetTop);
+        });
+
+        $("#clear").click(function () {
+            drawing.Clear();
+            return false;
+        });
+
+        $("#submit").click(function () {
+            drawing.Name = $("#username").val();
+            $("#chooseyourname").hide();
+            $("#draw").show();
+        });
+
+        $("#username").keydown(function (event) {
+            if (event.keyCode == '13') {
+                $("#submit").click();
             }
         });
     });
@@ -54,11 +103,40 @@
             canvas { 
                 border: 1px solid black; 
                 cursor: crosshair; 
+                display: inline-block;
+            }
+            .who {
+                vertical-align: top;
+                padding: 0 0 0 10px;
+                display: inline-block;
+            }
+            #draw {
+                display: none;
             }
         </style>
     </head>
     <body>
-        <h1>Start drawing</h1>
-        <canvas id="drawing" width="200" height="200" />
+        <div id="chooseyourname">
+            <h1>What is your name?</h1>
+            <input type="text" id="username" />
+            <input type="submit" value="Submit" id="submit" />
+        </div>
+        <div id="draw">
+            <h1>Start drawing</h1>
+            <canvas id="drawing" width="300" height="300"></canvas>
+            <div class="who">
+                Who is drawing
+                <div id="who"></div>
+            </div>
+            <br />
+            <select id="color">
+                <option value="black">Black</option>
+                <option value="red">Red</option>
+                <option value="green">Green</option>
+                <option value="blue">Blue</option>
+            </select>
+            <br />
+            <a id="clear" href="#">Clear</a>
+        </div>
     </body>
 </html>

@@ -24,17 +24,6 @@ namespace MvcApp.Framework
             _allSockets.Add(socket);
         }
 
-        public void PublishExcept(object message, SocketSendAdapter socket)
-        {
-            var serializer = new JavaScriptSerializer();
-            var wireMessage = new WireResponseMessage { Uri = message.GetType().FullName.Replace('.', '_'), Data = message };
-            var sJson = serializer.Serialize(wireMessage);
-            foreach (var s in _allSockets.Where(s => !socket.Equals(s)).ToList())
-            {
-                s.Send(sJson);
-            }
-        }
-
         public void MessageBegin(WebSocketConnection socket)
         {
             _currentInfo = new CurrentMessageInfo {Connection = new SocketSendAdapter(socket)};

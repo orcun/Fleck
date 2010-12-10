@@ -1,4 +1,5 @@
-﻿using Fleck;
+﻿using System;
+using Fleck;
 
 namespace MvcApp.Framework
 {
@@ -9,7 +10,10 @@ namespace MvcApp.Framework
         public SocketSendAdapter(WebSocketConnection socket)
         {
             _socket = socket;
+            Id = Guid.NewGuid();
         }
+
+        public Guid Id { get; private set; }
 
         public void Send(string message)
         {

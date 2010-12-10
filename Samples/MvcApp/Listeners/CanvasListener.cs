@@ -19,6 +19,10 @@ namespace MvcApp.Listeners
             {
                 X = message.X,
                 Y = message.Y,
+                Name = message.Name,
+                R = message.R,
+                G = message.G,
+                B = message.B
             });
         }
     }

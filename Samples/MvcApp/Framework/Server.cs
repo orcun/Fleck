@@ -30,8 +30,10 @@ namespace MvcApp.Framework
             var eventAggregator = ServiceLocator.Current.GetInstance<IEventAggregator>();
             server.Start(socket =>
             {
+                SocketSendAdapter socketAdapter = null;
                 socket.OnOpen = () =>
                 {
+                    socketAdapter = new SocketSendAdapter(socket);
                     socketManager.Add(socket);
                 };
                 socket.OnClose = () =>
@@ -42,7 +44,6 @@ namespace MvcApp.Framework
                 {
                     socketManager.MessageBegin(socket);
                     var deserialized = serializer.Deserialize<WireMessage>(message);
-                    var socketAdapter = new SocketSendAdapter(socket);
                     var socketMessage = (ISocketMessage)serializer.Deserialize(serializer.Serialize(deserialized.Data), socketMessages[deserialized.Uri]);
                     socketMessage.Socket = socketAdapter;
                     eventAggregator.PublishMessage(socketMessage);
