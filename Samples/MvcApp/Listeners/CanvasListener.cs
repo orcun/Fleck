@@ -17,6 +17,7 @@ namespace MvcApp.Listeners
         {
             _manager.Publish(new Canvas
             {
+                Id = message.Socket.Id,
                 X = message.X,
                 Y = message.Y,
                 Name = message.Name,

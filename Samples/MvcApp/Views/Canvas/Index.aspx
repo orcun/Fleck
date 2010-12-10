@@ -17,7 +17,7 @@
                     ctx.fillRect(canvas.X, canvas.Y, 1, 1);
                     var who = $("#" + canvas.Id);
                     if (who.length == 0) {
-                        $("#who").append('<span id="' + canvas.Id + '">' + canvas.Name + '</span>');
+                        $("#who").append('<p id="' + canvas.Id + '">' + canvas.Name + '</p>');
                         who = $("#" + canvas.Id);
                     }
                     else {
