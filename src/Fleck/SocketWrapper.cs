@@ -48,7 +48,8 @@ namespace Fleck
         public Task Authenticate(X509Certificate2 certificate, Action callback, Action<Exception> error)
         {
             var ssl = new SslStream(_stream, false);
-            _stream = ssl;
+            var queued = new QueuedStream(ssl);
+            _stream = queued;
             Func<AsyncCallback, object, IAsyncResult> begin =
                 (cb, s) => ssl.BeginAuthenticateAsServer(certificate, false, SslProtocols.Tls, false, cb, s);
                 
