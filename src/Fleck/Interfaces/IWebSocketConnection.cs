@@ -9,8 +9,8 @@ namespace Fleck
         Action<string> OnMessage { get; set; }
         Action<byte[]> OnBinary { get; set; }
         Action<Exception> OnError { get; set; }
-        void Send(string message);
-        void Send(byte[] message);
+        void Send(string message, string logMessage = null);
+        void Send(byte[] message, string logMessage = null);
         void Close();
         IWebSocketConnectionInfo ConnectionInfo { get; }
         bool IsAvailable { get; }

@@ -50,13 +50,13 @@ namespace Fleck
       get { return !_closing && !_closed && Socket.Connected; }
     }
 
-    public void Send(string message)
+    public void Send(string message, string logMessage = null)
     {
       if (Handler == null)
         throw new InvalidOperationException("Cannot send before handshake");
 
       if (!IsAvailable) {
-        FleckLog.Warn("Data sent while closing or after close. Ignoring.");
+        FleckLog.Warn("Data sent while closing or after close. Ignoring." + logMessage);
         return;
       }
 
@@ -64,13 +64,13 @@ namespace Fleck
       SendBytes(bytes);
     }
 
-    public void Send(byte[] message)
+    public void Send(byte[] message, string logMessage = null)
     {
       if (Handler == null)
         throw new InvalidOperationException("Cannot send before handshake");
 
       if (!IsAvailable) {
-        FleckLog.Warn("Data sent while closing or after close. Ignoring.");
+        FleckLog.Warn("Data sent while closing or after close. Ignoring." + logMessage);
         return;
       }
 
@@ -106,7 +106,7 @@ namespace Fleck
       if (bytes.Length == 0)
         CloseSocket();
       else
-        SendBytes(bytes, CloseSocket);
+        SendBytes(bytes, "close", CloseSocket);
     }
 
     public void CreateHandler(IEnumerable<byte> data)
@@ -123,7 +123,7 @@ namespace Fleck
       _initialize(this);
 
       var handshake = Handler.CreateHandshake(subProtocol);
-      SendBytes(handshake, OnOpen);
+      SendBytes(handshake, "handshake", OnOpen);
     }
 
     private void Read(List<byte> data, byte[] buffer)
@@ -184,20 +184,20 @@ namespace Fleck
       }
     }
 
-    private void SendBytes(byte[] bytes, Action callback = null)
+    private void SendBytes(byte[] bytes, string logMessage = null, Action callback = null)
     {
       Socket.Send(bytes, () =>
       {
-        FleckLog.Debug("Sent " + bytes.Length + " bytes");
+        FleckLog.Debug("Sent " + bytes.Length + " bytes." + logMessage);
         if (callback != null)
           callback();
       },
                         e =>
       {
         if (e is IOException)
-          FleckLog.Debug("Failed to send. Disconnecting.", e);
+          FleckLog.Debug("Failed to send. Disconnecting." + logMessage, e);
         else
-          FleckLog.Info("Failed to send. Disconnecting.", e);
+          FleckLog.Info("Failed to send. Disconnecting." + logMessage, e);
         CloseSocket();
       });
     }
